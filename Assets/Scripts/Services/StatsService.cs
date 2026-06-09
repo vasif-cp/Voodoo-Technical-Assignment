@@ -138,6 +138,26 @@ public class StatsService : IStatsService
 		return (m_XPForLevel[index]);
 	}
 
+	#region Game Mode Stats
+	public int GetGameModeLevel(GameModeType gameModeType)
+	{
+		string key = GetGameModeLevelKey(gameModeType);
+		return PlayerPrefs.GetInt(key, 1); 
+	}
+
+	public void SetGameModeLevel(GameModeType gameModeType, int level)
+	{
+		string key = GetGameModeLevelKey(gameModeType);
+		PlayerPrefs.SetInt(key, level);
+	}
+
+	private string GetGameModeLevelKey(GameModeType gameModeType)
+	{
+		return $"GameModeLevel_{gameModeType}";
+	}
+	
+	#endregion
+
 	#region IAs
 
 	// Behaviour probas

@@ -16,4 +16,6 @@ public interface IStatsService
     int XPToNextLevel(int currentLevel);
     string GetNickname();
     void SetNickname(string name);
+    int GetGameModeLevel(GameModeType gameModeType);
+    void SetGameModeLevel(GameModeType gameModeType, int level);
 }

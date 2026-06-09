@@ -9,7 +9,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b5ecc05044e2e451ea31001ef82ea541, type: 3}
-  m_Name: PaintBomb
+  m_Name: PaintBombPlayerPosition
   m_EditorClassIdentifier: 
   m_Probability: 1
   m_Prefab: {fileID: 1665382018052950, guid: 427ed9357443c453f805ffe5b92d3390, type: 2}

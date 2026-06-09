@@ -39,10 +39,13 @@ public class MainMenuView : View<MainMenuView>
         m_IdSkin = m_StatsService.FavoriteSkin;
     }
 
-    public void OnPlayButton()
+    public void OnPlay(GameModeType gameModeType)
     {
         if (GameService.currentPhase == GamePhase.MAIN_MENU)
+        {
+            GameService.SetActiveGameMode(gameModeType);
             GameService.ChangePhase(GamePhase.LOADING);
+        }
     }
 
     protected override void OnGamePhaseChanged(GamePhase _GamePhase)

@@ -17,13 +17,6 @@ public enum GamePhase
 
 public class GameService : IGameService
 {
-    private const float c_PopPointTeamPadding = 7.5f;
-    private const float c_PopPointPadding = 15.0f;
-    private const float c_PowerUpPadding = 13.0f;
-    private const float c_MinPowerUpRate = 1f;
-    private const float c_MaxPowerUpRate = 2.5f;
-    private const float c_BrushRate = 16f;
-
     public event Action<GamePhase>  onGamePhaseChanged;
     public event Action onScoresCalculated;
 
@@ -60,6 +53,7 @@ public class GameService : IGameService
     private ITerrainService m_TerrainService;
 
     private Transform m_HumanPlayerTr;
+    private GameModeData m_ActiveGameMode;
 
     public bool m_IsPlaying { get; set; }
     private float m_Level;
@@ -76,21 +70,22 @@ public class GameService : IGameService
     public List<SkinData> m_Skins { get; set; }
     private List<Color> m_Colors;
     private List<Vector3> m_PopPoints;
-    private List<PowerUpData> m_PowerUps;
     private PlayerNameData m_PlayerNameData;
     private List<GameObject> m_Objects; // Powerups and other map objects
     private List<Player> m_OrderedPlayers;
     private Transform m_HumanSpotlight;
 
     private GameConfig m_GameConfig;
+    private GameModeConfig m_GameModeConfig;
     private DiContainer m_Container;
     private ISceneEventsService m_SceneEventsService;
     
     [Inject]
-    public void Construct(GameConfig gameConfig, IStatsService statsService, IBattleRoyaleService battleRoyaleService,
+    public void Construct(GameConfig gameConfig, GameModeConfig gameModeConfig, IStatsService statsService, IBattleRoyaleService battleRoyaleService,
         ITerrainService terrainService, DiContainer container, ISceneEventsService sceneEventsService)
     {
         m_GameConfig = gameConfig;
+        m_GameModeConfig = gameModeConfig;
         m_StatsService = statsService;
         m_BattleRoyaleService = battleRoyaleService;
         m_TerrainService = terrainService;
@@ -130,26 +125,10 @@ public class GameService : IGameService
         }
 
         m_PlayerNameData = Resources.Load<PlayerNameData>("PlayerNames");
-
-        m_PowerUps = new List<PowerUpData>(Resources.LoadAll<PowerUpData>("PowerUps"));
     }
 
     private void OnAwake()
     {
-        float halfWidth = m_TerrainService.WorldHalfWidth;
-        float halfHeight = m_TerrainService.WorldHalfHeight;
-
-        m_PopPoints = new List<Vector3>() {
-            new Vector3 (-halfWidth + c_PopPointPadding + c_PopPointTeamPadding, 0.0f, -halfHeight + c_PopPointPadding - c_PopPointTeamPadding),
-            new Vector3 (-halfWidth + c_PopPointPadding - c_PopPointTeamPadding, 0.0f, -halfHeight + c_PopPointPadding + c_PopPointTeamPadding),
-            new Vector3 (halfWidth - c_PopPointPadding - c_PopPointTeamPadding, 0.0f, -halfHeight + c_PopPointPadding - c_PopPointTeamPadding),
-            new Vector3 (halfWidth - c_PopPointPadding + c_PopPointTeamPadding, 0.0f, -halfHeight + c_PopPointPadding + c_PopPointTeamPadding),
-            new Vector3 (-halfWidth + c_PopPointPadding + c_PopPointTeamPadding, 0.0f, halfHeight - c_PopPointPadding + c_PopPointTeamPadding),
-            new Vector3 (-halfWidth + c_PopPointPadding - c_PopPointTeamPadding, 0.0f, halfHeight - c_PopPointPadding - c_PopPointTeamPadding),
-            new Vector3 (halfWidth - c_PopPointPadding + c_PopPointTeamPadding, 0.0f, halfHeight - c_PopPointPadding - c_PopPointTeamPadding),
-            new Vector3 (halfWidth - c_PopPointPadding - c_PopPointTeamPadding, 0.0f, halfHeight - c_PopPointPadding + c_PopPointTeamPadding),
-        };
-
         foreach (Player player in m_Players)
         {
             if (player != null)
@@ -182,6 +161,38 @@ public class GameService : IGameService
         ChangePhase(GamePhase.MAIN_MENU);
     }
 
+    private void BuildPopPoints()
+    {
+        float halfWidth = m_TerrainService.WorldHalfWidth;
+        float halfHeight = m_TerrainService.WorldHalfHeight;
+        
+        float popPointPadding = m_ActiveGameMode.m_PopPointPadding;
+        float popPointTeamPadding = m_ActiveGameMode.m_PopPointTeamPadding;
+
+
+        m_PopPoints = new List<Vector3>()
+        {
+            new Vector3(-halfWidth + popPointPadding + popPointTeamPadding, 0.0f,
+                -halfHeight + popPointPadding - popPointTeamPadding),
+            new Vector3(-halfWidth + popPointPadding - popPointTeamPadding, 0.0f,
+                -halfHeight + popPointPadding + popPointTeamPadding),
+            new Vector3(halfWidth - popPointPadding - popPointTeamPadding, 0.0f,
+                -halfHeight + popPointPadding - popPointTeamPadding),
+            new Vector3(halfWidth - popPointPadding + popPointTeamPadding, 0.0f,
+                -halfHeight + popPointPadding + popPointTeamPadding),
+            new Vector3(-halfWidth + popPointPadding + popPointTeamPadding, 0.0f,
+                halfHeight - popPointPadding + popPointTeamPadding),
+            new Vector3(-halfWidth + popPointPadding - popPointTeamPadding, 0.0f,
+                halfHeight - popPointPadding - popPointTeamPadding),
+            new Vector3(halfWidth - popPointPadding + popPointTeamPadding, 0.0f,
+                halfHeight - popPointPadding - popPointTeamPadding),
+            new Vector3(halfWidth - popPointPadding - popPointTeamPadding, 0.0f,
+                halfHeight - popPointPadding + popPointTeamPadding),
+        };
+        
+        m_PopPoints.Shuffle();
+    }
+
     public List<Color> GetColors()
     {
         return (m_Colors);
@@ -209,8 +220,9 @@ public class GameService : IGameService
             case GamePhase.LOADING:
                 m_LastBrushTime = Time.time;
                 m_LastPowerUpTime = Time.time;
-                m_PowerUpRate = Random.Range(c_MinPowerUpRate, c_MaxPowerUpRate);
+                m_PowerUpRate = Random.Range(m_ActiveGameMode.m_MinPowerUpRate, m_ActiveGameMode.m_MaxPowerUpRate);
                 m_Level = m_StatsService.GetLevel();
+                BuildPopPoints();
                 PopPlayers();
 
                 if (m_OrderedPlayers == null)
@@ -250,6 +262,11 @@ public class GameService : IGameService
         if (onGamePhaseChanged != null)
             onGamePhaseChanged.Invoke(_GamePhase);
     }
+    
+    public void SetActiveGameMode(GameModeType gameModeType)
+    {
+        m_ActiveGameMode = m_GameModeConfig.GetGameModeData(gameModeType);
+    }
 
     public void AddMapObject(GameObject _Object)
     {
@@ -258,9 +275,6 @@ public class GameService : IGameService
 
     private void Randomize()
     {
-        // Randomize points groups
-        m_PopPoints.Shuffle();
-
         // Reset names
         m_PlayerNameData.Init();
 
@@ -370,14 +384,15 @@ public class GameService : IGameService
 
         if (Time.time - m_LastPowerUpTime > m_PowerUpRate)
         {
-            m_PowerUpRate = Random.Range(c_MinPowerUpRate, c_MaxPowerUpRate);
+            m_PowerUpRate = Random.Range(m_ActiveGameMode.m_MinPowerUpRate, m_ActiveGameMode.m_MaxPowerUpRate);
             m_LastPowerUpTime = Time.time;
 
-            PowerUpData powerUpData = m_PowerUps[Random.Range(0, m_PowerUps.Count)];
+            var availablePowerUps = m_ActiveGameMode.GetAvailablePowerUps(m_StatsService);
+            PowerUpData powerUpData = availablePowerUps[Random.Range(0, availablePowerUps.Count)];
             PopObjectRandomly(powerUpData.m_Prefab);
         }
 
-        if (Time.time - m_LastBrushTime > c_BrushRate)
+        if (Time.time - m_LastBrushTime > m_ActiveGameMode.m_BrushRate)
         {
             m_LastBrushTime = Time.time;
             PopObjectRandomly(m_BrushPowerUpPrefab.gameObject);
@@ -388,14 +403,15 @@ public class GameService : IGameService
 
     public void PopObjectRandomly(GameObject _Prefab)
     {
-        m_PosBuffer.Set(Random.Range(-m_TerrainService.WorldHalfWidth + c_PowerUpPadding, m_TerrainService.WorldHalfWidth - c_PowerUpPadding),
+        float powerUpPadding = m_ActiveGameMode.m_PowerUpPadding;
+        m_PosBuffer.Set(Random.Range(-m_TerrainService.WorldHalfWidth + powerUpPadding, m_TerrainService.WorldHalfWidth - powerUpPadding),
                              0.0f,
-                        Random.Range(-m_TerrainService.WorldHalfHeight + c_PowerUpPadding, m_TerrainService.WorldHalfHeight - c_PowerUpPadding));
+                        Random.Range(-m_TerrainService.WorldHalfHeight + powerUpPadding, m_TerrainService.WorldHalfHeight - powerUpPadding));
 
-        if (Mathf.Abs(m_PosBuffer.x) < c_PowerUpPadding)
-            m_PosBuffer.x += c_PowerUpPadding * Mathf.Sign(m_PosBuffer.x);
-        if (Mathf.Abs(m_PosBuffer.z) < c_PowerUpPadding)
-            m_PosBuffer.z += c_PowerUpPadding * Mathf.Sign(m_PosBuffer.z);
+        if (Mathf.Abs(m_PosBuffer.x) < powerUpPadding)
+            m_PosBuffer.x += powerUpPadding * Mathf.Sign(m_PosBuffer.x);
+        if (Mathf.Abs(m_PosBuffer.z) < powerUpPadding)
+            m_PosBuffer.z += powerUpPadding * Mathf.Sign(m_PosBuffer.z);
 
         m_TerrainService.ClampPosition(ref m_PosBuffer, Constants.c_SpawnBorderOffset);
         m_Objects.Add(m_Container.InstantiatePrefab(_Prefab, m_PosBuffer, Quaternion.identity, null));
@@ -413,7 +429,8 @@ public class GameService : IGameService
 
     public GameObject PickPowerUp()
     {
-        return m_PowerUps[Random.Range(0, m_PowerUps.Count)].m_Prefab;
+        var availablePowerUps = m_ActiveGameMode.GetAvailablePowerUps(m_StatsService);
+        return availablePowerUps[Random.Range(0, availablePowerUps.Count)].m_Prefab;
     }
 
     public Player GetBestPlayer()
@@ -457,6 +474,8 @@ public class GameService : IGameService
     {
         if (m_BattleRoyaleService.GetAlivePlayersCount() > 1)
             m_BattleRoyaleService.KillHumanPlayer();
+        
+        m_ActiveGameMode.OnGameEnd(m_StatsService, m_BattleRoyaleService.GetHumanPlayer().m_Rank);
 
         m_BattleRoyaleService.m_IsPlaying = true;
 
