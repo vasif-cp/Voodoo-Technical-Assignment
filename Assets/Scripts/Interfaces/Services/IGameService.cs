@@ -23,4 +23,5 @@ public interface IGameService
     void SkipRV();
     void TryRevive();
     Player GetBestPlayer();
+    void SetActiveGameMode(GameModeType gameModeType);
 }
