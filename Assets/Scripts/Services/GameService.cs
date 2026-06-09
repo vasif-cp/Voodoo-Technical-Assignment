@@ -8,6 +8,7 @@ using Random = UnityEngine.Random;
 public enum GamePhase
 {
     MAIN_MENU,
+    SKIN_SHOP,
     LOADING,
     GAME,
     PRE_END,
@@ -193,6 +194,7 @@ public class GameService : IGameService
         RVEndView.Instance.SetTitleColor(humanColor);
         m_MainMenuView.SetTitleColor(humanColor);
         LoadingView.Instance.SetTitleColor(humanColor);
+        SkinShopView.Instance.SetTitleColor(humanColor);
     }
 
     public void ChangePhase(GamePhase _GamePhase)

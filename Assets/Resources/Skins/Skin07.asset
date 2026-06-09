@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ca57448139916471c8cd2921f0994aaf, type: 3}
-  m_Name: Skin04
+  m_Name: Skin07
   m_EditorClassIdentifier: Assembly-CSharp::SkinDatas
-  ID: 3
-  Color: {fileID: 11400000, guid: 97e60a7a57d2d4083ab8a0c398e397df, type: 2}
-  Brush: {fileID: 11400000, guid: e848f987341224b059f1a00b0f2e53c3, type: 2}
+  ID: 6
+  Color: {fileID: 11400000, guid: d6f1278e4175a4fdb80032d4f8463861, type: 2}
+  Brush: {fileID: 11400000, guid: efeaa1ffb6e62475c9e04a0b60b7755e, type: 2}

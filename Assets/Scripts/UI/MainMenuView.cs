@@ -58,10 +58,13 @@ public class MainMenuView : View<MainMenuView>
 
             case GamePhase.LOADING:
                 m_BrushGroundLight.SetActive(false);
-
-                    m_BrushesPrefab.SetActive(false);
-
+                m_BrushesPrefab.SetActive(false);
                 if (m_Visible)
+                    Transition(false);
+                break;
+            
+            case GamePhase.SKIN_SHOP:
+                if(m_Visible)
                     Transition(false);
                 break;
         }
@@ -100,6 +103,11 @@ public class MainMenuView : View<MainMenuView>
     public int GetRankingCount()
     {
         return m_Ratings.Length;
+    }
+    
+    public void OpenSkinShop()
+    {
+        GameService.ChangePhase(GamePhase.SKIN_SHOP);
     }
 
     public void LeftButtonBrush()
