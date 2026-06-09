@@ -111,6 +111,14 @@ public class TerrainService : ITerrainService
 
 		return m_Surfaces[minIndex].transform.position;
 	}
+	
+	public Vector3 GetRandomSurfacePosition(float _BorderOffset)
+	{
+		float xPos = Random.Range(-WorldHalfWidth + _BorderOffset, WorldHalfWidth - _BorderOffset);
+		float zPos = Random.Range(-WorldHalfHeight + _BorderOffset, WorldHalfHeight - _BorderOffset);
+
+		return new Vector3(xPos, 0.0f, zPos);
+	}
 
 	public void ReplaceColor(Vector3 _Center, float _StartWidth, float _EndWidth, int _OldColorHash, int _NewColorHash, ref Color _NewColor)
 	{
