@@ -9,6 +9,6 @@ public class DefaultGameModeData : GameModeData
     
     public override IReadOnlyList<PowerUpData> GetAvailablePowerUps(IStatsService statsService)
     {
-        return s_AllPowerUps;
+        return GetDefaultPowerUps();
     }
 }

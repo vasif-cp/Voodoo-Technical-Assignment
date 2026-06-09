@@ -12,5 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77da6f84f87064437afcde75fd3b6e9f, type: 3}
   m_Name: DefaultGameModeData
   m_EditorClassIdentifier: 
+  m_DefaultPowerUps:
+  - {fileID: 11400000, guid: 707909f05d8274438a62b7a0fec4fa9b, type: 2}
+  - {fileID: 11400000, guid: d0b76c6fa360548088faf3b80e72a6d7, type: 2}
   m_MinPowerUpRate: 1.5
   m_MaxPowerUpRate: 2.5
+  m_PopPointTeamPadding: 7.5
+  m_PopPointPadding: 15
+  m_PowerUpPadding: 13
+  m_BrushRate: 16
