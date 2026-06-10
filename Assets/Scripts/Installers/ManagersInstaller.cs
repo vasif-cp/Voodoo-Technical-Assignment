@@ -21,6 +21,7 @@ public class ManagersInstaller : ScriptableObjectInstaller<ManagersInstaller>
         Container.BindInterfacesAndSelfTo<TerrainService>().FromSubContainerResolve().ByMethod(InstallTerrainManager).AsSingle();
         Container.Bind<IMapService>().To<MapService>().AsSingle();
         Container.Bind<ISceneEventsService>().To<SceneEventsService>().AsSingle();
+        Container.Bind<IFeatureService>().To<FeatureService>().AsSingle();
     }
 
     private void InstallBattleRoyaleManager(DiContainer subContainer)
