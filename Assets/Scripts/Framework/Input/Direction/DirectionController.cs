@@ -56,8 +56,17 @@ public class DirectionController : InputController
 
     void Update()
     {
-		if (m_BattleRoyaleService.m_IsPlaying == false)
+        if (!m_BattleRoyaleService.m_IsPlaying)
+        {
+            if (m_IsMoving)
+            {
+                m_IsMoving = false;
+                m_DirectionController.OnEndMove();
+            }
+            
             return;
+        }
+        
 
         if (Input.GetMouseButtonDown(0))
         {
