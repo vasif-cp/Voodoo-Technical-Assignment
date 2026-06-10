@@ -147,3 +147,39 @@ I matched the local convention case-by-case, but the project has **no single sta
 Functionally it fills a circle in the player's colour at a random position on the map, but the **cause → effect is not obvious**: the fill appears away from the player with no telegraph, so it isn't clear what happened or that it benefited the player.
 
 **What I'd do:** add clear feedback — a short projectile/arc or trail from the player to the target, a target marker/ring just before the fill, and a matching VFX/SFX, with the fill unmistakably in the player's colour. This keeps the mechanic legible and improves game feel without changing the underlying logic.
+
+### 4. Improve test coverage and TDD-readiness
+The project is **not currently set up for automated testing**:
+- There are **no test assemblies for the game code** (the only test `.asmdef`s present are Zenject's bundled extras); gameplay scripts live in the default assembly with no Unity Test Framework setup.
+- Core logic is **tightly coupled to Unity statics and singletons** — `Time.*` (used across ~26 files), `PlayerPrefs` accessed directly inside services, `Resources.Load*`, and `FindObjectOfType` / `.Instance` (~14 files) — so behaviour can't easily run headless or be substituted with fakes.
+- Large `MonoBehaviour`s mix gameplay rules with rendering and lifecycle (e.g. `GameService`, `HumanPlayer`), leaving few pure units to test.
+- **Positive:** the project already uses Zenject with service interfaces (`IGameService`, `IStatsService`, `IFeatureService`, …), which is a solid seam to build on.
+
+**What I'd do:**
+- Add assembly definitions (a gameplay asmdef + an Editor *Tests* asmdef) and wire up the Unity Test Framework.
+- Extract Unity-free logic into plain C# classes behind the existing interfaces and unit-test them — e.g. weighted power-up selection (`m_Probability`), `GetGridUvRect`, the booster-level lookup (`GetBoosterModeLevelData`), and feature-flag persistence (`FeatureService`).
+- Wrap Unity statics behind small interfaces (`ISaveStore` for `PlayerPrefs`, `IClock` for `Time`, `IRandom` for `Random`) so services become deterministic and mockable.
+
+With those seams in place, TDD becomes realistic for all new systems.
+
+---
+
+## AI-assisted feature generation (future direction)
+
+Each feature here was built on its **own isolated branch** (`feature/Booster_Game_Mode`, `feature/Skin_Selection`, `feature/Cheat_Menu`) following a **consistent, data-driven recipe**. That makes them clean, self-contained examples — ideal material to codify as a reusable **AI skill / agent workflow** (few-shot examples from the branch diffs), so routine extensions like *"add a new game mode"* can be scaffolded by an AI agent and then reviewed by a human.
+
+The patterns are deliberately repeatable, which is exactly what an agent needs. For example, adding a game mode is a fixed sequence:
+
+```
+Skill: "Add Game Mode"
+Reference diff: feature/Booster_Game_Mode
+
+1. Create  <Name>GameModeData : GameModeData      // tuning + available boosters
+2. Add     <Name> to the GameModeType enum
+3. Create  the <Name> asset and add it to GameModeConfig
+4. (opt.)  Author <Name>ModeLevelsData for per-level setup
+5. Add     a GameModeLaunchButton on the Main Menu with the new enum value
+   → No changes to GameService; mode-exclusive content stays curated per mode.
+```
+
+Because the booster branch already demonstrates every one of these steps end to end, it can serve directly as the worked example an agent learns from. This pairs well with improvement #2 (a single enforced code standard): the more consistent the codebase, the more reliable the AI-generated output — turning "add the next mode/booster/skin set" into a guided, low-risk task.
