@@ -10,23 +10,15 @@ public class DebugMenuView : View<DebugMenuView>
     [SerializeField] private RectTransform           m_Container;  
     [SerializeField] private DebugMenuToggle         m_DebugMenuTogglePrefab;
 
-    private IGameService m_GameService;
     private IFeatureService m_FeatureService;
     
     private bool m_Built;
     private readonly List<DebugMenuToggle> m_Rows = new();
 
     [Inject]
-    public void Construct(IGameService gameService,IFeatureService featureService)
+    public void Construct(IFeatureService featureService)
     {
-        m_GameService = gameService;
         m_FeatureService = featureService;
-    }
-
-    protected override void Awake()
-    {
-        base.Awake();
-        m_Panel.SetActive(false);
     }
 
     protected override void OnGamePhaseChanged(GamePhase _GamePhase)

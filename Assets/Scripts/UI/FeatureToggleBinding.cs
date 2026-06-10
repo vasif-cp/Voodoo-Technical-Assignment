@@ -20,6 +20,7 @@ public class FeatureToggleBinding : MonoBehaviour
     private void OnEnable()
     {
         m_FeatureService.OnFeatureChanged += HandleChanged;
+        HandleChanged(m_Feature,m_FeatureService.IsEnabled(m_Feature));
     }
 
     private void OnDisable()
@@ -29,17 +30,16 @@ public class FeatureToggleBinding : MonoBehaviour
 
     private void HandleChanged(GameFeature f, bool isEnabled)
     {
-        if (f == m_Feature)
+        if (f != m_Feature) return;
+        
+        foreach (var targetGameObject in m_TargetsToEnable)
         {
-            foreach (var targetGameObject in m_TargetsToEnable)
-            {
-                targetGameObject.SetActive(isEnabled);
-            }
+            targetGameObject.SetActive(isEnabled);
+        }
             
-            foreach (var targetGameObject in m_TargetsToDisable)
-            {
-                targetGameObject.SetActive(!isEnabled);
-            }
+        foreach (var targetGameObject in m_TargetsToDisable)
+        {
+            targetGameObject.SetActive(!isEnabled);
         }
     }
 }

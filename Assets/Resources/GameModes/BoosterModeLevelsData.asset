@@ -13,23 +13,26 @@ MonoBehaviour:
   m_Name: BoosterModeLevelsData
   m_EditorClassIdentifier: 
   m_BoosterModeLevels:
-  - m_Level: 1
-    m_PowerUps:
-    - {fileID: 11400000, guid: d0b76c6fa360548088faf3b80e72a6d7, type: 2}
-    - {fileID: 11400000, guid: 707909f05d8274438a62b7a0fec4fa9b, type: 2}
   - m_Level: 2
     m_PowerUps:
     - {fileID: 11400000, guid: d0b76c6fa360548088faf3b80e72a6d7, type: 2}
     - {fileID: 11400000, guid: 707909f05d8274438a62b7a0fec4fa9b, type: 2}
-  - m_Level: 3
-    m_PowerUps:
-    - {fileID: 11400000, guid: d0b76c6fa360548088faf3b80e72a6d7, type: 2}
-    - {fileID: 11400000, guid: 707909f05d8274438a62b7a0fec4fa9b, type: 2}
+    - {fileID: 11400000, guid: 423fd408ebac644ecb4b0ed0d49b6ec9, type: 2}
   - m_Level: 4
     m_PowerUps:
-    - {fileID: 11400000, guid: d0b76c6fa360548088faf3b80e72a6d7, type: 2}
     - {fileID: 11400000, guid: 707909f05d8274438a62b7a0fec4fa9b, type: 2}
-  - m_Level: 5
+    - {fileID: 11400000, guid: 423fd408ebac644ecb4b0ed0d49b6ec9, type: 2}
+  - m_Level: 6
     m_PowerUps:
+    - {fileID: 11400000, guid: d53bd6f0163b94c30b52388d2899c5ac, type: 2}
+    - {fileID: 11400000, guid: d0b76c6fa360548088faf3b80e72a6d7, type: 2}
+  - m_Level: 8
+    m_PowerUps:
+    - {fileID: 11400000, guid: d53bd6f0163b94c30b52388d2899c5ac, type: 2}
     - {fileID: 11400000, guid: d0b76c6fa360548088faf3b80e72a6d7, type: 2}
     - {fileID: 11400000, guid: 707909f05d8274438a62b7a0fec4fa9b, type: 2}
+  - m_Level: 10
+    m_PowerUps:
+    - {fileID: 11400000, guid: d53bd6f0163b94c30b52388d2899c5ac, type: 2}
+    - {fileID: 11400000, guid: d0b76c6fa360548088faf3b80e72a6d7, type: 2}
+    - {fileID: 11400000, guid: 423fd408ebac644ecb4b0ed0d49b6ec9, type: 2}
