@@ -6,7 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="d2f03423-86a1-4427-a43d-ceb146bd2d1c" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Draw.ioTest/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Draw.ioTest/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/MobileHaptic/Scripts/MobileHapticManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MobileHaptic/Scripts/MobileHapticManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/SkinViewPanel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/SkinViewPanel.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -114,6 +114,7 @@
       <option name="presentableId" value="Default" />
       <updated>1781001979729</updated>
       <workItem from="1781001981190" duration="22984000" />
+      <workItem from="1781125609725" duration="890000" />
     </task>
     <servers />
   </component>

@@ -16,12 +16,6 @@ public class SkinViewPanel : MonoBehaviour
     private const float c_PunchAnimDuration = 0.4f;
     
     public Image BackgroundImage => m_BackgroundImage;
-    
-    private void Awake()
-    {
-        Button button = GetComponent<Button>();
-        button.onClick.AddListener(SelectSkin);
-    }
 
     private void OnEnable()
     {
@@ -29,7 +23,7 @@ public class SkinViewPanel : MonoBehaviour
         transform.DOPunchScale(Vector3.one * c_PunchAnimForce,c_PunchAnimDuration);
     }
 
-    private void SelectSkin()
+    public void SelectSkin()
     {
         int skinIndex = GetSkinIndex();
         SkinShopView.Instance.SelectSkin(skinIndex);
