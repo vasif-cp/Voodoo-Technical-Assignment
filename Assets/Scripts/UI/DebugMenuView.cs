@@ -24,7 +24,11 @@ public class DebugMenuView : View<DebugMenuView>
     protected override void OnGamePhaseChanged(GamePhase _GamePhase)
     {
         base.OnGamePhaseChanged(_GamePhase);
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
         bool show = _GamePhase == GamePhase.MAIN_MENU;  
+#else
+        bool show = false;
+#endif
         Transition(show);   
         
     }
