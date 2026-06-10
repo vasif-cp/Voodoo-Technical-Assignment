@@ -19,6 +19,18 @@ public class MobileHapticManager : MonoBehaviour {
 		Failure = 6,
 		None = 7
 	};
+	
+	private static readonly long[] s_AndroidForces =
+	{
+		20, 
+		40,   
+		80,   
+		120,  
+		60,  
+		100, 
+		150,  
+		0    
+	};
 
 	private static MobileHapticManager _instance;
 	public static MobileHapticManager Instance{
@@ -48,6 +60,7 @@ public class MobileHapticManager : MonoBehaviour {
 		#if UNITY_EDITOR
 
 		Debug.Log("Vibrate");
+		
 
 #elif UNITY_IOS
 
@@ -64,7 +77,7 @@ public class MobileHapticManager : MonoBehaviour {
 
 		//iOSHapticFeedback.Instance.Trigger
 #elif UNITY_ANDROID
-			AndroidVibration.Vibrate(androidForces[type]);
+		AndroidVibration.Vibrate(s_AndroidForces[(int)type]);
 #endif
 
 

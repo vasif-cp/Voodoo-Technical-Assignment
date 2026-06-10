@@ -6,7 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="d2f03423-86a1-4427-a43d-ceb146bd2d1c" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Draw.ioTest/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Draw.ioTest/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/DebugMenuView.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/DebugMenuView.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/MobileHaptic/Scripts/MobileHapticManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MobileHaptic/Scripts/MobileHapticManager.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
