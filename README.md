@@ -67,7 +67,7 @@ A scrollable screen showing **12 skins (2 models × 6 colours)**. Every skin —
 
 **Example — how a cell maps to the atlas**
 ```
-12 models → one 384×640 RenderTexture (3 columns × 4 rows)
+12 models → one 768×1280 RenderTexture (3 columns × 4 rows)
 Cell(index) → RawImage.uvRect = GetGridUvRect(index)   // samples that skin's tile
 ```
 
